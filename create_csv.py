@@ -48,8 +48,8 @@ def create_csv() -> List[CsvFile]:
                 # try:
                     csv_obj = CsvFile(name=f'{row[0]}',
                                       ocr_quality_wer=round(get_ocr_qaulity(i, f'{PATH_DATA}/dev-0/'),2),
-                                      ocr_quality_cer=0.0,
-                                      ocr_quality_iou=0.0,
+                                      ocr_quality_cer=0.3,
+                                      ocr_quality_iou=0.4,
                                       path_to_image=f'{PATH_DATA}/images/{row[0]}',
                                       data_source='fiszki_ocr',
                                       ocr_engine=engine, train_test=train_test, language=row[1],

@@ -20,6 +20,8 @@ def get_ocr_qaulity(nr: int, path_in: str) -> float:
 
     expected_data = _read_expected_data(test_dir, nr)
     actual_data = _read_actual_data(test_dir, nr)
+    print(expected_data)
+    print(actual_data)
     assert len(expected_data) == len(actual_data), 'Different number of lines!'
     return _calculate_metrics(expected_data, actual_data, nr)
 
@@ -43,14 +45,17 @@ def _read(data_path: str, compressed: bool, nr: int) -> List[str]:
     y = 0
     if compressed:
         lines = []
-        with lzma.open(data_path, 'rt') as f:
+        with open(data_path, 'rt', encoding='Latin1') as f:
+            # print(data_path)
+            # print(f)
             for line in f:
-                lines.append(line)
+                #print(line[53:])
+                lines.append(line[53:])
                 if x == nr:
-                    text.append(line.strip())
+                    text.append(line[53:].strip())
                 x += 1
             return text
-    with open(data_path) as f:
+    with open(data_path, encoding='Latin1') as f:
         for line in f:
             if y == nr:
                 text.append(line.strip())
@@ -59,7 +64,7 @@ def _read(data_path: str, compressed: bool, nr: int) -> List[str]:
 
 
 def _read_actual_data(test_dir, nr: int):
-    actual = path.join(test_dir, 'out.tsv.xz')
+    actual = path.join(test_dir, 'in.tsv')
     if not path.isfile(actual):
         raise FileNotFoundError(f'Actual output not found here: {actual}')
     return _read(actual, True, nr)

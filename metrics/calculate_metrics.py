@@ -33,7 +33,7 @@ def _parse_args(path_in: str) -> Namespace:
 
 
 def _read_expected_data(test_dir, nr: int):
-    expected = path.join(test_dir, 'expected.tsv')
+    expected = path.join(test_dir, '../utils/expected.tsv')
     if not path.isfile(expected):
         raise FileNotFoundError(f'Expected not found here: {expected}')
     return _read(expected, False, nr)
@@ -64,7 +64,7 @@ def _read(data_path: str, compressed: bool, nr: int) -> List[str]:
 
 
 def _read_actual_data(test_dir, nr: int):
-    actual = path.join(test_dir, 'in.tsv')
+    actual = path.join(test_dir, '../utils/in.tsv')
     if not path.isfile(actual):
         raise FileNotFoundError(f'Actual output not found here: {actual}')
     return _read(actual, True, nr)

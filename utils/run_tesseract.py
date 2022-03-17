@@ -8,10 +8,11 @@ from os import listdir, makedirs, path
 from typing import Dict, Iterator, List, Optional, Tuple
 
 from PIL import Image as PillowImage
+import pytesseract
 from tesserocr import PyTessBaseAPI
 from tqdm import tqdm
 
-
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 def _main():
     args = _parse_args()
     files = _filter_files(_find_images(args.image_dir), args)
@@ -31,7 +32,7 @@ def _parse_args() -> Namespace:
     parser.add_argument('image_dir', help='Path to the directory containing images to recognize')
     parser.add_argument('metadata_path', help='Path to the metadata file containing language')
     parser.add_argument('target_dir', help='Path to the directory to store recognized text')
-    parser.add_argument('--header_path', help='Path to the metadata header (eg. in-header.tsv)', default=None)
+    parser.add_argument('--header_path', help='Path to the metadata header (eg. in-header.tsv)', default='D:\Inżynierka\Projekty\data\dev-0\in-header.tsv')
     parser.add_argument('--no_dpi', action='store_true', help='Should Tesseract detect DPI on its own?')
     parser.add_argument('--hocr', action='store_true', help='Should Tesseract store HOCR instead of text?')
     parser.add_argument('--dpi', default=150, type=int, help='Pixel depth of an image')
@@ -73,7 +74,7 @@ def _save_text(target_dir: str, files_and_texts: Iterator[Tuple[str, str]], is_h
 
 
 def _save(filename: str, contents: str):
-    with open(filename, 'w') as f:
+    with open(filename, 'w', encoding='latin1') as f:
         f.write(contents)
 
 
@@ -91,12 +92,12 @@ class _TsvReader:
 
     @staticmethod
     def _read_lzma_lines(filename) -> List[str]:
-        with lzma.open(filename, 'rt') as f:
+        with lzma.open(filename, 'rt', encoding='latin1') as f:
             return f.readlines()
 
     @staticmethod
     def _read_lines(filename) -> List[str]:
-        with open(filename) as f:
+        with open(filename, encoding='latin1') as f:
             return f.readlines()
 
 

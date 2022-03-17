@@ -37,7 +37,7 @@ def create_csv() -> List[CsvFile]:
     tests = ['A']
     for test in tests:
         list_csv = []
-        tsv_file = open(f'{PATH_DATA}/dev-0/in.tsv', encoding='latin1')
+        tsv_file = open(f'utils/in.tsv', encoding='latin1')
         read_tsv = csv.reader(tsv_file, delimiter="\t")
         for i, row in enumerate(read_tsv):
             if i % 2 == 0:
@@ -47,7 +47,7 @@ def create_csv() -> List[CsvFile]:
             for engine in ocr_engines:
                 # try:
                     csv_obj = CsvFile(name=f'{row[0]}',
-                                      ocr_quality_wer=round(get_ocr_qaulity(i, f'{PATH_DATA}/dev-0/'),2),
+                                      ocr_quality_wer=round(get_ocr_qaulity(i, f'utils'),2),
                                       ocr_quality_cer=0.3,
                                       ocr_quality_iou=0.4,
                                       path_to_image=f'{PATH_DATA}/images/{row[0]}',

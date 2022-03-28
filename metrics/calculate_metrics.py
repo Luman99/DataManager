@@ -20,8 +20,8 @@ def get_ocr_qaulity(nr: int, path_in: str) -> float:
 
     expected_data = _read_expected_data(test_dir, nr)
     actual_data = _read_actual_data(test_dir, nr)
-    print(expected_data)
-    print(actual_data)
+    # print(expected_data)
+    # print(actual_data)
     assert len(expected_data) == len(actual_data), 'Different number of lines!'
     return _calculate_metrics(expected_data, actual_data, nr)
 

@@ -6,6 +6,8 @@ from metrics.calculate_metrics import get_ocr_qaulity
 from utils.Constants import PATH_DATA, PATH_DATA_CF
 from utils.CsvFile import CsvFile
 from utils.OcrEngine import OcrEngine
+from utils.get_data_for_model import get_data_for_model
+from utils.get_tesseract_engine_score import get_tesseract_score
 
 
 def get_ocr_qualities(ocr_engines, get_ocr_quality2):
@@ -24,7 +26,7 @@ def create_csv() -> List[CsvFile]:
     # ocr_engines.remove('paddle_paddle_results')
     # ocr_engines.remove('ms_ocr_res')
 
-    #ocr_qualities_wer = get_ocr_qualities(ocr_engines, get_ocr_quality)
+    # ocr_qualities_wer = get_ocr_qualities(ocr_engines, get_ocr_quality)
     # ocr_qualities_cer = get_ocr_qualities(ocr_engines, get_ocr_quality_cf_cer)
     # ocr_qualities_iou = get_ocr_qualities(ocr_engines, get_ocr_quality_cf_iou)
 
@@ -46,41 +48,42 @@ def create_csv() -> List[CsvFile]:
                 train_test = 'test'
             for engine in ocr_engines:
                 # try:
-                    csv_obj = CsvFile(name=f'{row[0]}',
-                                      ocr_quality_wer=round(get_ocr_qaulity(i, f'utils'),2),
-                                      ocr_quality_cer=0.3,
-                                      ocr_quality_iou=0.4,
-                                      path_to_image=f'{PATH_DATA}/images/{row[0]}',
-                                      data_source='fiszki_ocr',
-                                      ocr_engine=engine, train_test=train_test, language=row[1],
-                                      test=test)
-                                    # ocr_quality_wer = ocr_qualities_wer.loc[
-                                    #                       ocr_qualities_wer['name'] == f'{PATH_DATA_CF}/{row[0]}.json',
-                                    #                       f'ocr_quality_{engine}'].values[0],
-                                    # ocr_quality_cer = ocr_qualities_cer.loc[
-                                    #                       ocr_qualities_cer['name'] == f'{PATH_DATA_CF}/{row[0]}.json',
-                                    #                       f'ocr_quality_{engine}'].values[0],
-                                    # ocr_quality_iou = ocr_qualities_iou.loc[
-                                    #                       ocr_qualities_iou['name'] == f'{PATH_DATA_CF}/{row[0]}.json',
-                                    #                       f'ocr_quality_{engine}'].values[0],
-                                    # path_to_json = f'{PATH_DATA}/json_cf_PD/{engine}_cf/{row[0]}.json',
-                                    # data_source = 'ocr-test-challenge',
-                                    # ocr_engine = engine, train_test = train_test, language = row[1],
-                                    # test = test)
-                    list_csv.append(csv_obj)
-                # except:
-                #     pass
+                csv_obj = CsvFile(name=f'{row[0]}',
+                                  ocr_quality_wer=round(get_ocr_qaulity(i, f'utils'), 2),
+                                  tesseract_engine_score=round(get_tesseract_score(row[0]), 2),
+                                  path_to_image=f'{PATH_DATA}/images/{row[0]}',
+                                  data_source='fiszki_ocr',
+                                  ocr_engine=engine, train_test=train_test, language=row[1],
+                                  test=test,
+                                  tokens=get_data_for_model(row[0])['number_of_tokens'],
+                                  white_spaces=get_data_for_model(row[0])['number_of_white_spaces'])
+                # ocr_quality_wer = ocr_qualities_wer.loc[
+                #                       ocr_qualities_wer['name'] == f'{PATH_DATA_CF}/{row[0]}.json',
+                #                       f'ocr_quality_{engine}'].values[0],
+                # ocr_quality_cer = ocr_qualities_cer.loc[
+                #                       ocr_qualities_cer['name'] == f'{PATH_DATA_CF}/{row[0]}.json',
+                #                       f'ocr_quality_{engine}'].values[0],
+                # ocr_quality_iou = ocr_qualities_iou.loc[
+                #                       ocr_qualities_iou['name'] == f'{PATH_DATA_CF}/{row[0]}.json',
+                #                       f'ocr_quality_{engine}'].values[0],
+                # path_to_json = f'{PATH_DATA}/json_cf_PD/{engine}_cf/{row[0]}.json',
+                # data_source = 'ocr-test-challenge',
+                # ocr_engine = engine, train_test = train_test, language = row[1],
+                # test = test)
+                list_csv.append(csv_obj)
+            # except:
+            #     pass
 
         all_csv += list_csv
     return all_csv
 
 
 if __name__ == '__main__':
-    with open(f'{PATH_DATA}/dataset_local2.csv', 'w', newline='') as file:
+    with open(f'{PATH_DATA}/dataset_local_new_model.csv', 'w', newline='') as file:
         writer = csv.writer(file, delimiter=',')
-        writer.writerow(['name', 'ocr_quality_wer', 'ocr_quality_cer', 'ocr_quality_iou', 'path_to_json',
-                         'data_source', 'ocr_engine', 'train_test', 'language', 'test'])
+        writer.writerow(['name', 'ocr_quality_wer', 'tesseract_engine_score', 'path_to_image',
+                         'data_source', 'ocr_engine', 'train_test', 'language', 'test', 'tokens', 'white_spaces'])
         for csvFile in create_csv():
-            writer.writerow([csvFile.name, csvFile.ocr_quality_wer, csvFile.ocr_quality_cer, csvFile.ocr_quality_iou,
-                             csvFile.path_to_json, csvFile.data_source, csvFile.ocr_engine,
-                             csvFile.train_test, csvFile.language, csvFile.test])
+            writer.writerow([csvFile.name, csvFile.ocr_quality_wer, csvFile.tesseract_engine_score,
+                             csvFile.path_to_image, csvFile.data_source, csvFile.ocr_engine,
+                             csvFile.train_test, csvFile.language, csvFile.test, csvFile.tokens, csvFile.white_spaces])

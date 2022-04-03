@@ -16,7 +16,7 @@ def common_format_from_hocr(path_to_hocr: str):
     byte_file = bytes(file, 'utf-8')
     common_format_data = build_common_format_data(byte_file)
 
-    return make_common_format_json(doc_id=path_to_hocr, tokens=common_format_data.tokens,
+    return make_common_format_json(doc_id=path_to_hocr, tokens=common_format_data.number_of_tokens,
                                    tokens_positions=common_format_data.token_positions,
                                    tokens_scores=common_format_data.token_scores,
                                    pages_value=common_format_data.pages,

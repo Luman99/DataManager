@@ -3,30 +3,29 @@ from typing import List
 from metrics.calculate_metrics import get_ocr_qaulity
 from utils.Constants import PATH_DATA
 from utils.CsvFile import CsvFile
-from utils.get_data_for_model import get_data_for_model
 
 
 def create_csv() -> List[CsvFile]:
     list_csv = []
     tsv_file = open(f'utils/in.tsv', encoding='latin1')
     read_tsv = csv.reader(tsv_file, delimiter="\t")
-    for i, row in enumerate(read_tsv):
-        print(i)
-        data_for_model = get_data_for_model(row[0])
-        engine_score = data_for_model['engine_score']
-        number_of_tokens = data_for_model['number_of_tokens']
-        percent_of_white_spaces = data_for_model['percent_of_white_spaces']
+    data_for_model = open(f'{PATH_DATA}/data_for_model.txt', 'r')
+    for i, (row_tsv, row_txt) in enumerate(zip(read_tsv, data_for_model)):
+        row_txt = row_txt.split(',')
+        engine_score = float(row_txt[1])
+        number_of_tokens = int(row_txt[2])
+        percent_of_white_spaces = float(row_txt[3])
         if i % 2 == 0:
             train_test = 'train'
         else:
             train_test = 'test'
-        csv_obj = CsvFile(name=f'{row[0]}',
+        csv_obj = CsvFile(name=f'{row_tsv[0]}',
                           ocr_quality_wer=round(get_ocr_qaulity(i, f'utils'), 2),
-                          tesseract_engine_score=round(engine_score,2),
-                          path_to_image=f'{PATH_DATA}/images/{row[0]}',
+                          tesseract_engine_score=round(engine_score, 2),
+                          path_to_image=f'{PATH_DATA}/images/{row_tsv[0]}',
                           data_source='fiszki_ocr',
                           ocr_engine='tesseract',
-                          train_test=train_test, language=row[1],
+                          train_test=train_test, language=row_tsv[1],
                           test='A',
                           number_of_tokens=number_of_tokens,
                           percent_of_white_spaces=round(percent_of_white_spaces, 2))

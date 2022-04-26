@@ -5,7 +5,7 @@ class CsvFile:
     def __init__(self, name: str, ocr_quality_wer: float, tesseract_engine_score: float,
                  path_to_image: str,
                  data_source: str, ocr_engine: str, train_test: str, language: str,
-                 test: Optional[str], number_of_tokens: int, percent_of_white_spaces: int):
+                 test: Optional[str], number_of_tokens: int, percent_of_white_spaces: float):
 
         self.tesseract_engine_score = tesseract_engine_score
         self.test = test

@@ -6,7 +6,7 @@ import cv2
 from statistics import mean
 
 from utils.Constants import PATH_IMAGES
-from utils.create_txt_tesseract_files import PATH_DATA
+from utils.Constants import PATH_DATA
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 

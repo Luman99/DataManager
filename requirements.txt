@@ -1,8 +1,12 @@
-editdistance~=0.5.3
+opencv-python
+pytesseract
+tesseract
+matplotlib
+editdistance
 
-beautifulsoup4~=4.9.3
-pillow~=8.0.1
-tqdm~=4.54.1
-fire~=0.3.1
-jiwer~=2.2.0
-pandas~=1.1.5
+beautifulsoup4
+pillow
+tqdm
+fire
+jiwer
+pandas

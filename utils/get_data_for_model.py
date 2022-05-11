@@ -8,7 +8,8 @@ from statistics import mean
 from utils.Constants import PATH_IMAGES
 from utils.Constants import PATH_DATA
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'C:\ProgramData\Anaconda3\envs\DataManager\Lib\site-packages'
+pytesseract.pytesseract.tesseract_cmd = r'C:\ProgramTesseract-OCR'
 
 
 def get_data_for_model(file_name: str):
@@ -37,10 +38,7 @@ def get_data_for_model(file_name: str):
 if __name__ == '__main__':
     tsv_file = open(f'in.tsv', encoding='latin1')
     read_tsv = csv.reader(tsv_file, delimiter="\t")
-    f = open(f'{PATH_DATA}\\data_for_model.txt', 'w+', encoding='latin1')
+    f = open(f'{PATH_DATA}\\data_for_model2.txt', 'w+', encoding='latin1')
     for i, row in enumerate(read_tsv):
         f.write(f'{get_data_for_model(row[0])}\n')
     f.close()
-
-    # return {'engine_score': float(mean(scores) / 100), 'number_of_tokens': number_of_tokens,
-    #         'percent_of_white_spaces': number_of_white_spaces / number_of_tokens}
